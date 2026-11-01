@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Korea/US up to 10 picks: regular-session 4h BB(20,2) proximity screen.
+"""Korea/US up to 100 picks: regular-session 4h BB(20,2) proximity screen.
 Uses the SAME completed-session candle logic as existing update_signals.py.
 This is a screening tool, not a buy recommendation. No order placement.
 """
@@ -84,7 +84,7 @@ def score_frame(frame, market, now):
     return result, distance_pct
 
 
-def select(candidates, market, now, fetch, *, top_n=10):
+def select(candidates, market, now, fetch, *, top_n=100):
     rows=[]; errors=[]
     for ticker,(name,risk) in candidates.items():
         try:
@@ -106,24 +106,89 @@ def select(candidates, market, now, fetch, *, top_n=10):
     return selected,errors,len(rows)
 
 
+def dynamic_universe():
+    """공개 구성종목 목록을 읽고 실패하면 기존 25개 감시목록으로 제한한다."""
+    kr, us = dict(KR), dict(US)
+    source = {'kr':'fixed fallback', 'us':'fixed fallback'}
+    try:
+        import FinanceDataReader as fdr
+        listed = fdr.StockListing('KOSPI')
+        cols = {str(c).lower():c for c in listed.columns}
+        symbol_col = cols.get('code') or cols.get('symbol')
+        name_col = cols.get('name')
+        cap_col = cols.get('marcap') or cols.get('marketcap')
+        if symbol_col is None or name_col is None or cap_col is None:
+            raise ValueError(f'KOSPI 상장종목 열 확인 필요: {list(listed.columns)}')
+        listed=listed.sort_values(cap_col,ascending=False)
+        result={}
+        for _,row in listed.iterrows():
+            code=str(row[symbol_col]).zfill(6)
+            if len(code)!=6 or not code.isdigit():continue
+            name=str(row[name_col]); ticker=code+'.KS'
+            result[ticker]=(name, KR.get(ticker,(None,'시장 변동성 및 기업별 실적 불확실성'))[1])
+            if len(result)>=160:break
+        if len(result)>=100:
+            kr=result;source['kr']='KOSPI market-cap top 160'
+        else:raise ValueError('코스피 후보 100개 미만')
+    except Exception as exc:
+        print('KR 목록 자동 수집 실패, 기존 25개 목록 사용:',str(exc)[:200])
+    try:
+        import pandas as pd
+        tables=pd.read_html('https://en.wikipedia.org/wiki/List_of_NASDAQ-100_companies',match='Ticker')
+        result={}
+        for df in tables:
+            cols={str(c).strip().lower():c for c in df.columns}
+            tcol=next((v for k,v in cols.items() if 'ticker' in k),None)
+            ncol=next((v for k,v in cols.items() if 'company' in k),None)
+            if not tcol or not ncol:continue
+            for _,row in df.iterrows():
+                ticker=str(row[tcol]).strip().upper().replace('.','-')
+                if not ticker or len(ticker)>12:continue
+                result[ticker]=(str(row[ncol]), US.get(ticker,(None,'업종 경쟁·실적·주가 변동성'))[1])
+            if len(result)>=90:break
+        if len(result)>=90:
+            us=result;source['us']='Nasdaq-100 components'
+        else:raise ValueError(f'나스닥100 후보 {len(result)}개')
+    except Exception as exc:
+        print('US 목록 자동 수집 실패, 기존 25개 목록 사용:',str(exc)[:200])
+    return kr,us,source
+
+
 def main():
     import yfinance as yf
     now=datetime.now(timezone.utc)
+    kr,us,sources=dynamic_universe()
     payload={'generated_at':now.isoformat(),'method':'closed regular-market 4h/remaining-2.5h sessions, BB(20,2)',
-             'selection':'fixed 25-symbol watchlist per market, lower-break first then proximity, up to 10',
-             'markets':{}}
-    for key, candidates in [('kr',KR),('us',US)]:
+             'selection':'KOSPI market-cap candidates + Nasdaq-100 components, lower-break first then proximity, up to 100',
+             'universe_sources':sources, 'markets':{}}
+    for key,candidates in [('kr',kr),('us',us)]:
         market=MARKETS[key]
-        # 단일 호출은 실패 격리를 위해 순차 처리. 개별 실패는 건너뛰고 원인 집계.
+        # 요청을 작은 묶음으로 처리하여 대량 병렬 요청과 과도한 연결을 피합니다.
+        cached={}
+        names=list(candidates)
+        for start in range(0,len(names),15):
+            batch=names[start:start+15]
+            try:
+                data=yf.download(batch,period='35d',interval='60m',auto_adjust=False,
+                                 prepost=False,progress=False,threads=False,group_by='ticker',timeout=20)
+                import pandas as pd
+                for ticker in batch:
+                    if len(batch)==1 and not isinstance(data.columns,pd.MultiIndex):
+                        frame=data
+                    else:
+                        try:frame=data[ticker].dropna(how='all')
+                        except (KeyError,TypeError):continue
+                    if frame is not None and not frame.empty:cached[ticker]=frame
+            except Exception as exc:
+                print(f'{key} 배치 {start//15+1} 실패:',str(exc)[:160])
         def fetch(ticker):
-            return yf.Ticker(ticker).history(period='35d',interval='60m',auto_adjust=False,
-                                             prepost=False,raise_errors=True,timeout=12)
-        picks,errors,valid=select(candidates,market,now,fetch)
+            if ticker not in cached:raise ValueError('시세 조회 실패/누락')
+            return cached[ticker]
+        picks,errors,valid=select(candidates,market,now,fetch,top_n=100)
         payload['markets'][key]={'picks':picks,'valid_count':valid,
                                  'scanned_count':len(candidates), 'error_count':len(errors),
-                                 'errors':errors[:8],
-                                 'status':'ok' if len(picks)>0 else 'insufficient'}
-        print(f'{key}: 유효 {valid}/{len(candidates)}, 선정 {len(picks)}, 실패 {len(errors)}')
+                                 'errors':errors[:8], 'status':'ok' if picks else 'insufficient'}
+        print(f'{key}: 수집 {len(cached)}/{len(candidates)}, 유효 {valid}, 선정 {len(picks)}, 실패 {len(errors)}')
     OUT.parent.mkdir(parents=True,exist_ok=True)
     OUT.write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding='utf-8')
 

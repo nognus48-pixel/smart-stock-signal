@@ -11,6 +11,7 @@
 #sslab-auto-picks .head{display:flex;justify-content:space-between;gap:8px;align-items:start}
 #sslab-auto-picks .name{font-weight:700;font-size:18px}#sslab-auto-picks .symbol{color:#667589;font-size:12px;margin-top:4px}
 #sslab-auto-picks .tag{border-radius:20px;background:#ecfdf5;color:#08745b;padding:5px 8px;font-size:11px;white-space:nowrap}
+#sslab-auto-picks .tag.break{background:#fef2f2;color:#c62828}
 #sslab-auto-picks .data{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:16px 0}
 #sslab-auto-picks .label{font-size:12px;color:#748295;margin-bottom:4px}
 #sslab-auto-picks .val{font-size:15px;font-weight:700;overflow-wrap:anywhere}
@@ -21,6 +22,7 @@
 @media(max-width:500px){#sslab-auto-picks h2{font-size:22px}#sslab-auto-picks .stock{padding:14px}}
 </style>
 <h2>오늘의 종목 분석 후보</h2>
+<!-- 위험요인 문자 수정 버전 2026-11-01-v4 -->
 <p class="hint" id="sslab-picks-timestamp">시세를 불러오는 중입니다…</p>
 <section><h3>KR 한국 주식</h3><div class="grid" id="sslab-picks-kr"><div class="empty">데이터 확인 중</div></div></section>
 <section><h3>US 미국 주식</h3><div class="grid" id="sslab-picks-us"><div class="empty">데이터 확인 중</div></div></section>
@@ -32,26 +34,59 @@
   var RAW='https://raw.githubusercontent.com/nognus48-pixel/smart-stock-signal/main/docs/picks.json';
   var root=document.getElementById('sslab-auto-picks'); if(!root)return;
   var stamp=root.querySelector('#sslab-picks-timestamp');
+  // Blogger 테마에서 <style> 규칙이 제거되어도 카드 스타일을 복원합니다.
+  function paint(el,css){if(el)el.style.cssText+=';'+css;return el}
+  paint(root,'max-width:1120px;margin:16px auto 28px;font-family:Arial,Malgun Gothic,sans-serif;color:#15263e;box-sizing:border-box');
+  root.querySelectorAll('h2').forEach(function(x){paint(x,'font-size:26px;font-weight:700;text-align:center;margin:18px 0 6px')});
+  root.querySelectorAll('h3').forEach(function(x){paint(x,'font-size:19px;font-weight:700;border-left:4px solid #0c8972;padding-left:10px;margin:22px 0 10px')});
+  paint(stamp,'text-align:center;font-size:12px;color:#69798a;margin:0 0 18px');
+  root.querySelectorAll('.grid').forEach(function(x){paint(x,'display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,255px),1fr));gap:12px')});
+  root.querySelectorAll('.foot').forEach(function(x){paint(x,'border-top:1px solid #e4ecf1;padding-top:12px;font-size:11px;color:#64758a;line-height:1.7;margin-top:18px')});
+
   function E(tag,cls,text){var el=document.createElement(tag);if(cls)el.className=cls;if(text!==undefined)el.textContent=String(text);return el}
-  function empty(box,msg){box.replaceChildren(E('div','empty',msg))}
+  function empty(box,msg){box.replaceChildren(paint(E('div','empty',msg),'background:#f8fafc;color:#65758b;border:1px dashed #cad4df;border-radius:12px;padding:20px;text-align:center;font-size:13px'))}
   function number(n,currency){var x=Number(n);if(!Number.isFinite(x))return '—';return x.toLocaleString('ko-KR',{maximumFractionDigits:currency==='KRW'?0:2})+(currency==='KRW'?'원':'달러')}
+  function cleanText(value){
+    var t=String(value == null ? '' : value);
+    // Literal HTML entities (including repeated &amp; nesting) in the source data.
+    for(var k=0;k<12;k++){
+      var next=t.replace(/&amp;/gi,'&');
+      if(next===t)break;
+      t=next;
+    }
+    t=t.replace(/&\s*#\s*(?:0*183|x0*b7)\s*;?/gi,' ')
+       .replace(/&middot;?/gi,' ')
+       .replace(/위험\s*요인/g,' ')
+       .replace(/[·•]/g,' ')
+       .replace(/^[\s:：|;\-]+/,'')
+       .replace(/\s{2,}/g,' ');
+    return t.trim();
+  }
   function card(row){
-    var article=E('article','stock'); var head=E('div','head'),left=E('div');
-    left.append(E('div','name',row.name||row.symbol||'종목'),E('div','symbol',row.symbol||''));
-    var tag=E('span','tag',row.signal==='lower_break'?'하단 이탈':'하단 접근');head.append(left,tag);article.append(head);
-    var fields=E('div','data');
+    var article=paint(E('article','stock'),'border:1px solid #d7e1ea;border-radius:14px;background:#fff;padding:17px;min-width:0;box-sizing:border-box'); var head=paint(E('div','head'),'display:flex;justify-content:space-between;gap:8px;align-items:flex-start'),left=E('div');
+    left.append(paint(E('div','name',row.name||row.symbol||'종목'),'font-weight:700;font-size:18px'),paint(E('div','symbol',row.symbol||''),'color:#667589;font-size:12px;margin-top:4px'));
+    var isBreak=row.signal==='lower_break';
+    var tag=paint(E('span','tag'+(isBreak?' break':''),isBreak?'하단 이탈':'하단 접근'),'border-radius:20px;background:'+(isBreak?'#fef2f2':'#ecfdf5')+';color:'+(isBreak?'#c62828':'#08745b')+';padding:5px 8px;font-size:11px;white-space:nowrap');head.append(left,tag);article.append(head);
+    var fields=paint(E('div','data'),'display:grid;grid-template-columns:1fr 1fr;gap:11px;margin:16px 0');
     var items=[['최근 마감 가격',number(row.price,row.currency)],['볼린저 하단',number(row.lower,row.currency)],
       ['볼린저 상단',number(row.upper,row.currency)],['하단과의 거리',Number.isFinite(Number(row.distance_pct))?Number(row.distance_pct).toFixed(2)+'%':'—']];
-    items.forEach(function(it){var cell=E('div');cell.append(E('div','label',it[0]),E('div','val',it[1]));fields.append(cell)});
-    article.append(fields,E('div','risk','위험요인 · '+(row.risk||'추가 하락 및 가격 변동 가능')));
-    var parsed=new Date(row.bar_close);article.append(E('div','note','마지막 완료 구간: '+(isNaN(parsed.getTime())?'확인 불가':parsed.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}))));
+    items.forEach(function(it){var cell=E('div');cell.append(paint(E('div','label',it[0]),'font-size:12px;color:#748295;margin-bottom:4px'),paint(E('div','val',it[1]),'font-size:15px;font-weight:700;overflow-wrap:anywhere'));fields.append(cell)});
+    article.append(fields,paint(E('div','risk','위험요인: '+cleanText(row.risk||'추가 하락 및 가격 변동 가능')),'border-top:1px solid #e6edf2;padding-top:11px;line-height:1.55;color:#93522c;font-size:12px'));
+    var parsed=new Date(row.bar_close);article.append(paint(E('div','note','마지막 완료 구간: '+(isNaN(parsed.getTime())?'확인 불가':parsed.toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}))),'font-size:11px;color:#69798a;margin-top:13px;line-height:1.6'));
     return article;
   }
   function renderMarket(obj,key){
     var box=root.querySelector('#sslab-picks-'+key);if(!box)return;
     var rows=obj&&Array.isArray(obj.picks)?obj.picks:[];
     if(rows.length===0||obj.status!=='ok'){empty(box,'충분한 최신 종목 데이터가 없어 표시를 보류합니다.');return}
-    box.replaceChildren(); rows.slice(0,10).forEach(function(x){box.append(card(x))});
+    // 하단 이탈 종목을 맨 위로 표시합니다. 같은 상태끼리는 기존 접근 순서를 유지합니다.
+    var sorted=rows.map(function(item,index){return {item:item,index:index}})
+      .sort(function(a,b){
+        var pa=a.item.signal==='lower_break'?0:1;
+        var pb=b.item.signal==='lower_break'?0:1;
+        return pa-pb || a.index-b.index;
+      });
+    box.replaceChildren(); sorted.slice(0,100).forEach(function(entry){box.append(card(entry.item))});
   }
   function load(){
     fetch(RAW+'?t='+Date.now(),{cache:'no-store'}).then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()})

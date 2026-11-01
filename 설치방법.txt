@@ -1,38 +1,11 @@
-스마트 주식연구소 - 하단 최대 10+10 자동 종목 후보
-====================================
-기존 상단 코스피/나스닥100 신호판은 절대 삭제하지 않습니다.
+스마트 주식연구소 - 한국 최대100개 + 미국 최대100개
 
-[1] GitHub 저장소 nognus48-pixel/smart-stock-signal 에서 기존 파일 업데이트
-- update_signals.py : 기존 파일 그대로 두기(변경 불필요)
-- requirements.txt : 기존 파일 그대로 두기(변경 불필요)
-- 새 update_picks.py : 저장소 최상위에 업로드
-- .github/workflows/update.yml : 기존 내용을 이 ZIP의 update.yml 내용으로 교체
-  * 브라우저에서 .github -> workflows -> update.yml -> 연필(Edit) -> 전체 교체 -> Commit changes
-- docs/picks.json : 초기 빈 JSON 파일을 업로드(없어도 최초 Actions 실행 시 자동 생성)
-- docs/market.json : 기존 파일 유지
+1. GitHub smart-stock-signal 저장소의 update_picks.py 내용을 이 파일로 교체하고 Commit changes
+2. 저장소 requirements.txt의 내용을 새 requirements.txt로 교체하고 Commit changes
+3. .github/workflows/update.yml 내용을 새 update.yml 내용으로 교체하고 Commit changes
+4. GitHub Actions > Update market signals > Run workflow 실행
+5. docs/picks.json에서 kr/us 각 picks 개수를 확인. 시장/데이터 제공 상태에 따라 100개보다 적게 나올 수 있습니다.
+6. Blogger > 레이아웃 > 오늘의 추천 종목 > 수정 > blogger_picks_widget.html 전체 붙여넣기 > 저장
+7. 상단 시장 신호판은 그대로 유지
 
-[2] GitHub -> Actions -> Update market signals -> Run workflow -> main -> Run workflow
-초록 체크가 나타나면 저장소 docs/picks.json 을 열어 확인합니다.
-markets.kr.picks 와 markets.us.picks 각각 최대 10개인지, status가 ok인지 확인하세요.
-유효 종목이 하나도 없으면 "insufficient"로 나오며 블로그에는 결과를 표시하지 않습니다.
-
-[3] Blogger -> 레이아웃
-- 상단 신호판(한국·미국 증시 신호) 수정하지 않음
-- 기존 하단 '오늘의 추천 종목' HTML/JavaScript 가젯 -> 수정
-- blogger_picks_widget.html 파일의 전체 내용을 복사해 기존 콘텐츠와 교체 -> 저장
-- 블로그 보기 -> Ctrl+F5 새로고침
-
-[4] 변경하고 싶은 분석 대상 종목
-update_picks.py 의 KR / US 사전에서 종목 코드를 바꾸면 됩니다.
-각 시장은 고정된 25개 감시종목을 대상으로 매수 후보 최대 10개를 선택합니다.
-절대로 한국/미국 전체 상장종목을 검색하는 프로그램이라고 소개하지 마세요.
-
-[5] 필수 참고사항
-- 60분봉을 거래소별 정규장 4시간 + 남은 2시간30분 구간으로 묶습니다.
-- 20개 완료 구간으로 볼린저밴드(20,2)를 계산합니다.
-- 하단 이탈(가장 근접한 것 우선)을 먼저, 부족하면 하단 위의 근접 종목을 채웁니다.
-- 급격한 하락 시 하단 이탈 종목의 추가 하락 위험이 큽니다.
-- 주기적으로 실행을 시도하나 GitHub Actions와 시세 제공처의 지연이 있을 수 있습니다.
-- 무료 Yahoo Finance/yfinance 데이터의 광고 수익 블로그 활용에는 별도 이용조건 확인이 필요합니다.
-- 실패/데이터 부족 시 결과를 꾸며내지 않고 '데이터 확인 중'으로 표시합니다.
-- 코드 실행에 필요한 증권사/거래소 API 키는 없습니다.
+주의: 기존 25개 고정 감시 목록과 달리 코스피 시가총액 상위 후보(160개)와 나스닥100 구성종목을 시도합니다. 목록 자동 조회가 실패하면 각 시장 기존 25개로 축소됩니다. 100개 자동 보장은 아닙니다. 무료 시세 수집 요청량 증가로 호출 제한/지연이 있을 수 있습니다. 데이터 제공 및 이용 조건 확인이 필요합니다.
