@@ -1,1 +1,265 @@
-{"generated_at":null,"markets":{"kr":{"picks":[],"status":"pending"},"us":{"picks":[],"status":"pending"}}}
+{
+  "generated_at": "2026-11-01T03:30:33.087512+00:00",
+  "method": "closed regular-market 4h/remaining-2.5h sessions, BB(20,2)",
+  "selection": "fixed 25-symbol watchlist per market, lower-break first then proximity, up to 10",
+  "markets": {
+    "kr": {
+      "picks": [
+        {
+          "name": "SK이노베이션",
+          "symbol": "096770.KS",
+          "price": 129800.0,
+          "lower": 128708.98,
+          "upper": 167706.02,
+          "distance_pct": 0.848,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "정유 마진·에너지 가격; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "LG",
+          "symbol": "003550.KS",
+          "price": 95300.0,
+          "lower": 93808.039,
+          "upper": 113841.961,
+          "distance_pct": 1.59,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "계열사 가치·지주사 할인; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "카카오",
+          "symbol": "035720.KS",
+          "price": 29100.0,
+          "lower": 28472.089,
+          "upper": 34057.911,
+          "distance_pct": 2.205,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "플랫폼 수익성 및 규제; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "POSCO홀딩스",
+          "symbol": "005490.KS",
+          "price": 272500.0,
+          "lower": 266456.992,
+          "upper": 323393.008,
+          "distance_pct": 2.268,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "철강 업황·원자재 가격; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "기아",
+          "symbol": "000270.KS",
+          "price": 105400.0,
+          "lower": 102771.379,
+          "upper": 115028.621,
+          "distance_pct": 2.558,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "자동차 판매와 환율 변동; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "NAVER",
+          "symbol": "035420.KS",
+          "price": 172300.0,
+          "lower": 167419.167,
+          "upper": 192970.833,
+          "distance_pct": 2.915,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "광고·플랫폼 성장률 및 규제; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "현대차",
+          "symbol": "005380.KS",
+          "price": 283000.0,
+          "lower": 271613.785,
+          "upper": 352361.215,
+          "distance_pct": 4.192,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "글로벌 자동차 수요 및 환율; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "KB금융",
+          "symbol": "105560.KS",
+          "price": 153900.0,
+          "lower": 146684.305,
+          "upper": 171675.695,
+          "distance_pct": 4.919,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "금리·대손충당금 변화; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "LG화학",
+          "symbol": "051910.KS",
+          "price": 231500.0,
+          "lower": 219808.9,
+          "upper": 284916.1,
+          "distance_pct": 5.319,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "화학 업황과 배터리 소재 수요; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "포스코퓨처엠",
+          "symbol": "003670.KS",
+          "price": 161900.0,
+          "lower": 153594.525,
+          "upper": 198390.475,
+          "distance_pct": 5.407,
+          "bar_close": "2026-10-30T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "이차전지 소재 수요·원가; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        }
+      ],
+      "valid_count": 25,
+      "scanned_count": 25,
+      "error_count": 0,
+      "errors": [],
+      "status": "ok"
+    },
+    "us": {
+      "picks": [
+        {
+          "name": "퀄컴",
+          "symbol": "QCOM",
+          "price": 164.97,
+          "lower": 165.686,
+          "upper": 187.79,
+          "distance_pct": -0.432,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "lower_break",
+          "risk": "휴대폰·반도체 수요 변동; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "엔비디아",
+          "symbol": "NVDA",
+          "price": 204.81,
+          "lower": 205.718,
+          "upper": 223.795,
+          "distance_pct": -0.441,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "lower_break",
+          "risk": "AI 반도체 수요·높은 기대치; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "인텔",
+          "symbol": "INTC",
+          "price": 65.88,
+          "lower": 72.048,
+          "upper": 105.218,
+          "distance_pct": -8.561,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "lower_break",
+          "risk": "공정 투자·수익성 개선 불확실성; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "마이크로소프트",
+          "symbol": "MSFT",
+          "price": 521.9,
+          "lower": 520.091,
+          "upper": 537.712,
+          "distance_pct": 0.348,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "near_lower",
+          "risk": "AI 투자비용·클라우드 성장 둔화; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "알파벳",
+          "symbol": "GOOGL",
+          "price": 279.76,
+          "lower": 277.94,
+          "upper": 360.643,
+          "distance_pct": 0.655,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "near_lower",
+          "risk": "광고 경기와 규제; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "아마존",
+          "symbol": "AMZN",
+          "price": 240.41,
+          "lower": 237.644,
+          "upper": 268.063,
+          "distance_pct": 1.164,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "near_lower",
+          "risk": "소비 경기·클라우드 성장 둔화; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "시스코",
+          "symbol": "CSCO",
+          "price": 104.51,
+          "lower": 103.168,
+          "upper": 112.227,
+          "distance_pct": 1.301,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "near_lower",
+          "risk": "네트워크 장비 투자 사이클; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "인튜이티브서지컬",
+          "symbol": "ISRG",
+          "price": 431.88,
+          "lower": 426.054,
+          "upper": 458.647,
+          "distance_pct": 1.367,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "near_lower",
+          "risk": "의료기기 규제·밸류에이션; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "애플",
+          "symbol": "AAPL",
+          "price": 344.8,
+          "lower": 340.115,
+          "upper": 350.154,
+          "distance_pct": 1.377,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "near_lower",
+          "risk": "제품 수요와 서비스 성장 둔화; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        },
+        {
+          "name": "AMD",
+          "symbol": "AMD",
+          "price": 505.18,
+          "lower": 492.23,
+          "upper": 585.699,
+          "distance_pct": 2.631,
+          "bar_close": "2026-10-30T16:00:00-04:00",
+          "signal": "near_lower",
+          "risk": "반도체 경쟁·수요 변동; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "USD"
+        }
+      ],
+      "valid_count": 25,
+      "scanned_count": 25,
+      "error_count": 0,
+      "errors": [],
+      "status": "ok"
+    }
+  }
+}
