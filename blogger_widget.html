@@ -1,0 +1,56 @@
+<!-- 스마트 주식연구소: 이 파일 전체를 Blogger HTML/JavaScript 가젯에 복사 -->
+<div id="sslab-signals">
+  <style>
+    #sslab-signals{font-family:Arial,'Malgun Gothic',sans-serif;max-width:960px;margin:0 auto;color:#1c2936}
+    #sslab-signals *{box-sizing:border-box}
+    #sslab-signals .ss-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    #sslab-signals .ss-card{padding:22px 8px;text-align:center;border:1px solid #dbe2ea;border-radius:14px;background:#fff}
+    #sslab-signals .ss-name{font-size:19px;font-weight:800;margin-bottom:12px}
+    #sslab-signals .ss-label{font-size:24px;font-weight:800}
+    #sslab-signals .ss-stars{font-size:29px;font-weight:700;letter-spacing:1px;line-height:1.3;min-height:39px}
+    #sslab-signals .ss-buy{color:#16875c}#sslab-signals .ss-sell{color:#c83c3c}#sslab-signals .ss-wait{color:#687685}
+    #sslab-signals .ss-foot{text-align:center;color:#7c8792;font-size:11px;margin:12px 0 0}
+    @media(max-width:420px){#sslab-signals .ss-name{font-size:16px}#sslab-signals .ss-stars{font-size:22px}#sslab-signals .ss-label{font-size:20px}}
+  </style>
+  <div class="ss-grid">
+    <div class="ss-card"><div class="ss-name">🇰🇷 코스피</div><div class="ss-label ss-wait" id="ss-kr-label">확인 중</div><div class="ss-stars" id="ss-kr-stars"></div></div>
+    <div class="ss-card"><div class="ss-name">🇺🇸 나스닥100</div><div class="ss-label ss-wait" id="ss-us-label">확인 중</div><div class="ss-stars" id="ss-us-stars"></div></div>
+  </div>
+  <div class="ss-foot" id="ss-foot">투자 판단 참고용 · 마지막 확인 중</div>
+</div>
+<script>
+(function(){
+  // GitHub 사용자명과 저장소명을 바꿔주세요. 저장소는 public이어야 합니다.
+  var GITHUB_USER='여기에_깃허브_아이디';
+  var REPO='smart-stock-signal';
+  var URL='https://raw.githubusercontent.com/'+encodeURIComponent(GITHUB_USER)+'/'+encodeURIComponent(REPO)+'/main/docs/market.json';
+  function show(key,status){
+    var label=document.getElementById('ss-'+key+'-label'),stars=document.getElementById('ss-'+key+'-stars');
+    if(!label||!stars)return;
+    var name=status==='buy'?'매수':status==='sell'?'매도':status==='wait'?'대기':'데이터 대기';
+    var cls=status==='buy'?'ss-buy':status==='sell'?'ss-sell':'ss-wait';
+    label.className='ss-label '+cls;label.textContent=name;
+    stars.className='ss-stars '+cls;stars.textContent=(status==='buy'||status==='sell')?'★★★★★':'';
+  }
+  function run(){
+    if(GITHUB_USER==='여기에_깃허브_아이디'){show('kr','unavailable');show('us','unavailable');return;}
+    fetch(URL+'?t='+Date.now(),{cache:'no-store'})
+      .then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json();})
+      .then(function(data){
+        var updated=Date.parse(data.generated_at||'');
+        // 자동 갱신 중단/데이터 이상 시 거짓 신호를 띄우지 않음.
+        if(!Number.isFinite(updated)||Date.now()-updated>72*3600000||updated>Date.now()+3600000)throw Error('stale');
+        ['kr','us'].forEach(function(k){
+          var m=data.markets&&data.markets[k]||{};
+          var bar=Date.parse(m.bar_close||'');
+          // 시장 휴장일(주말/공휴일)을 포함하여 오래된 종가는 보수적으로 숨김.
+          var valid=Number.isFinite(bar)&&Date.now()-bar<120*3600000&&bar<Date.now()+3600000;
+          show(k,valid&&['buy','sell','wait'].indexOf(m.status)>=0?m.status:'unavailable');
+        });
+        document.getElementById('ss-foot').textContent='최종 자료 갱신: '+new Date(updated).toLocaleString('ko-KR')+' · 투자 참고용';
+      })
+      .catch(function(){show('kr','unavailable');show('us','unavailable');document.getElementById('ss-foot').textContent='시세 데이터 연결을 확인해 주세요';});
+  }
+  run();setInterval(run,10*60*1000);
+})();
+</script>

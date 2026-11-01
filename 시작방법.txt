@@ -1,0 +1,42 @@
+스마트 주식연구소 — 코스피 + 나스닥100 자동 별점 설치
+================================================
+
+0. 파일 설명
+- update_signals.py: 무료 Yahoo Finance 가격 조회, 밴드 계산 및 JSON 저장
+- .github/workflows/update.yml: GitHub Actions 주기 실행
+- docs/market.json: 계산 결과(처음엔 미입력)
+- blogger_widget.html: Blogger 가젯에 붙이는 화면 코드
+
+1. GitHub(https://github.com)에 로그인합니다.
+2. 우측 상단 + → New repository → Repository name에 smart-stock-signal 입력,
+   Public 선택 → Create repository 클릭합니다.
+3. 이 압축파일을 푼 뒤 update_signals.py, requirements.txt, docs 폴더,
+   .github 폴더의 내용물을 같은 구조로 GitHub 저장소에 업로드합니다.
+   반드시 `.github/workflows/update.yml`이라는 경로를 유지하세요.
+4. 저장소 Settings → Actions → General → Workflow permissions에서
+   Read and write permissions를 선택하고 저장합니다.
+5. Actions → Update market signals → Run workflow를 클릭합니다.
+   성공(초록 체크)한 다음 docs/market.json을 열어 kr/us 각각 status가
+   buy, sell, wait인지 확인합니다. unavailable이면 Actions 로그를 점검하세요.
+6. blogger_widget.html을 메모장으로 열어
+   GITHUB_USER='여기에_깃허브_아이디' 부분을 자신의 GitHub 아이디로 바꿉니다.
+   GitHub 저장소 이름을 변경했다면 REPO도 변경하세요.
+7. blogger_widget.html 파일 내용을 전부 복사합니다.
+8. Blogger → 스마트 주식연구소 → 레이아웃 → 상단 '가젯 추가' →
+   HTML/JavaScript → 콘텐츠에 붙여넣기 → 저장합니다.
+9. 블로그 보기에서 한국/미국 각각 신호가 나타나는지 확인합니다.
+
+표시 규칙
+- 4시간 구간(정규장 마지막은 2시간30분)의 확정 종가가 BB(20,2) 하단 이하: 매수 ★★★★★
+- 상단 이상: 매도 ★★★★★ / 사이: 대기
+- 데이터 오류 및 오래된 데이터: 데이터 대기 (매매 신호를 지어내지 않음)
+- 화면에는 지표 설명을 표시하지 않습니다.
+
+중요한 제한
+- 코스피 ^KS11 및 나스닥100 ^NDX는 지수 자체이며 선물과 다릅니다.
+- 정규장 시간봉을 4시간/마지막 2시간30분으로 묶습니다. 차트 플랫폼과 차이 날 수 있습니다.
+- 휴장·조기폐장·서머타임·데이터 누락 또는 Yahoo 서비스 변경에 따라 신호가 비활성화될 수 있습니다.
+- 이는 무료·비공식 가격 데이터의 실험용 연동입니다. Yahoo/거래소 데이터의 공개 사용 권한을
+  확인하세요. 광고 수익 블로그의 공개 이용 권한은 별도로 검토가 필요합니다.
+- Actions 예약 실행은 정시 보장되지 않으며 공개 저장소가 60일 비활성 상태면 중지될 수 있습니다.
+- 위와 같은 한계로 투자 신호의 유효성 및 투자 수익은 보장되지 않습니다.
