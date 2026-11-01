@@ -1,1 +1,22 @@
-{"generated_at":null,"method":"4h closes / BB(20,2) / final bars","markets":{"kr":{"status":"unavailable"},"us":{"status":"unavailable"}}}
+{
+  "generated_at": "2026-11-01T02:46:42.153067+00:00",
+  "method": "regular-hours 4h/2.5h session segments; BB(20,2); closed segments",
+  "markets": {
+    "kr": {
+      "status": "wait",
+      "bar_close": "2026-10-30T13:00:00+09:00",
+      "last_price": 5671.17,
+      "lower": 4992.97,
+      "upper": 7098.022,
+      "bar_count": 54
+    },
+    "us": {
+      "status": "buy",
+      "bar_close": "2026-10-30T16:00:00-04:00",
+      "last_price": 28385.748,
+      "lower": 28481.08,
+      "upper": 30192.912,
+      "bar_count": 110
+    }
+  }
+}
