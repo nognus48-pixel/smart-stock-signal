@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-03T10:40:43.741887+00:00",
+  "generated_at": "2026-11-03T18:20:44.164361+00:00",
   "method": "regular-hours 4h/2.5h session segments; BB(20,2); closed segments",
   "markets": {
     "kr": {
@@ -16,7 +16,7 @@
       "last_price": 27996.295,
       "lower": 28117.484,
       "upper": 30283.66,
-      "bar_count": 110
+      "bar_count": 108
     }
   }
 }
