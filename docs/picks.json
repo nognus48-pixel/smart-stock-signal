@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-11T06:59:24.416450+00:00",
+  "generated_at": "2026-11-11T09:08:11.784972+00:00",
   "method": "closed regular-market 4h/remaining-2.5h sessions, BB(20,2)",
   "selection": "KOSPI market-cap candidates + Nasdaq-100 components, lower-break first then proximity, up to 100",
   "universe_sources": {
