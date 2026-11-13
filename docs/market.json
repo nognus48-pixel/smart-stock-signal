@@ -1,14 +1,14 @@
 {
-  "generated_at": "2026-11-13T02:51:01.739581+00:00",
+  "generated_at": "2026-11-13T07:08:01.820839+00:00",
   "method": "regular-hours 4h/2.5h session segments; BB(20,2); closed segments",
   "markets": {
     "kr": {
       "status": "wait",
-      "bar_close": "2026-11-12T13:00:00+09:00",
-      "last_price": 5380.69,
-      "lower": 5074.823,
-      "upper": 6037.048,
-      "bar_count": 53
+      "bar_close": "2026-11-13T13:00:00+09:00",
+      "last_price": 5317.67,
+      "lower": 5051.906,
+      "upper": 6015.048,
+      "bar_count": 54
     },
     "us": {
       "status": "wait",
