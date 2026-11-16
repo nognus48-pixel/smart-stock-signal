@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-16T05:53:50.065883+00:00",
+  "generated_at": "2026-11-16T15:25:52.493874+00:00",
   "method": "closed regular-market 4h/remaining-2.5h sessions, BB(20,2)",
   "selection": "KOSPI market-cap candidates + Nasdaq-100 components, lower-break first then proximity, up to 100",
   "universe_sources": {
@@ -400,6 +400,18 @@
           "lower": 139117.192,
           "upper": 166977.808,
           "distance_pct": 4.804,
+          "bar_close": "2026-11-16T13:00:00+09:00",
+          "signal": "near_lower",
+          "risk": "시장 변동성 및 기업별 실적 불확실성; 밴드 하단 이탈 후 추가 하락 가능",
+          "currency": "KRW"
+        },
+        {
+          "name": "효성",
+          "symbol": "004800.KS",
+          "price": 118400.0,
+          "lower": 112965.551,
+          "upper": 128584.449,
+          "distance_pct": 4.811,
           "bar_close": "2026-11-16T13:00:00+09:00",
           "signal": "near_lower",
           "risk": "시장 변동성 및 기업별 실적 불확실성; 밴드 하단 이탈 후 추가 하락 가능",
@@ -1195,18 +1207,6 @@
           "bar_close": "2026-11-16T13:00:00+09:00",
           "signal": "near_lower",
           "risk": "시장 변동성 및 기업별 실적 불확실성; 밴드 하단 이탈 후 추가 하락 가능",
-          "currency": "KRW"
-        },
-        {
-          "name": "포스코퓨처엠",
-          "symbol": "003670.KS",
-          "price": 172100.0,
-          "lower": 154015.023,
-          "upper": 181809.977,
-          "distance_pct": 11.742,
-          "bar_close": "2026-11-16T13:00:00+09:00",
-          "signal": "near_lower",
-          "risk": "이차전지 소재 수요·원가; 밴드 하단 이탈 후 추가 하락 가능",
           "currency": "KRW"
         }
       ],
